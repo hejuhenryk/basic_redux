@@ -1,5 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
+// import { actionTypes } from '../../store/actions/actions'
+import { increment, decrement, substract, add, save, remove } from '../../store/actions/indexActions'
 
 import CounterControl from '../../components/CounterControl/CounterControl.jsx'
 import CounterOutput from '../../components/CounterOutput/CounterOutput.jsx';
@@ -14,29 +16,29 @@ const Counter = props => {
             <CounterControl label="Add 5" clicked={props.onAddCounter}  />
             <CounterControl label="Subtract 5" clicked={props.onSubtractCounter}  />
             <br />
-        <button onClick={props.onSaveCounter}>Save Couter</button>
+        <button onClick={() => props.onSaveCounter(props.counter)}>Save Couter</button>
         <ul>
-            {props.savedCounters.map( res => <li key={res.id} id={res.id} onClick={(id)=>props.onRemove(id)}>{res.value}</li>)}
+            {props.savedCounters.map( res => <li key={res.id} id={res.id} onClick={()=>props.onRemove(res.id)}>{res.value}</li>)}
         </ul>
         </div>
     )
 }
-
+// state - dostajemy z combainReducers podczas createStore 
 const mapStateToProps = (state) => {
     return {
-        counter: state.counter,
-        savedCounters: state.resoults
+        counter: state.counter.counter,
+        savedCounters: state.result.resoults
     }
 }
 
 const mapDispatchToState = dispatch => {
     return {
-        onIncrementCounter: () => dispatch({type: 'INC'}),
-        onDecrementCounter: () => dispatch({type: 'DEC'}),
-        onAddCounter: () => dispatch({type: 'ADD', value: 5}),
-        onSubtractCounter: () => dispatch({type: 'SUB', value: 5}),
-        onSaveCounter: () => dispatch({type: 'SAVE'}),
-        onRemove: (id) => dispatch({type: 'REMOVE', value: id})
+        onIncrementCounter: () => dispatch(increment()),
+        onDecrementCounter: () => dispatch(decrement()),
+        onAddCounter: () => dispatch(add(5)),
+        onSubtractCounter: () => dispatch(substract(5)),
+        onSaveCounter: (result) => dispatch(save(result)),
+        onRemove: (id) => dispatch(remove(id))
     }
 }
 
